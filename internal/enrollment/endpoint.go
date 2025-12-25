@@ -3,8 +3,11 @@ package enrollment
 import (
 	"context"
 	"errors"
+	"log"
 
 	"github.com/JuD4Mo/go_api_web_meta/meta"
+	courseSDK "github.com/JuD4Mo/go_api_web_sdk/course"
+	userSDK "github.com/JuD4Mo/go_api_web_sdk/user"
 	"github.com/JuD4Mo/go_lib_response/response"
 )
 
@@ -68,6 +71,12 @@ func makeCreateEndpoint(s Service) Controller {
 
 		enroll, err := s.Create(ctx, req.UserId, req.CourseId)
 		if err != nil {
+			log.Println(err)
+			if errors.As(err, &userSDK.ErrNotFound{}) ||
+				errors.As(err, &courseSDK.ErrNotFound{}) {
+				return nil, response.NotFound(err.Error())
+			}
+
 			return nil, response.InternalServerError(err.Error())
 		}
 
@@ -115,6 +124,10 @@ func makeUpdateEndpoint(s Service) Controller {
 
 			if errors.As(err, &ErrNotFound{}) {
 				return nil, response.NotFound(err.Error())
+			}
+
+			if errors.As(err, &ErrInvalidStatus{}) {
+				return nil, response.BadRequest(err.Error())
 			}
 
 			return nil, response.InternalServerError(err.Error())

@@ -4,9 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"go_api_web_enrollment/internal/enrollment"
 	"net/http"
 	"strconv"
+
+	"github.com/JuD4Mo/go_api_web_enrollment/internal/enrollment"
 
 	"github.com/JuD4Mo/go_lib_response/response"
 	"github.com/go-kit/kit/endpoint"

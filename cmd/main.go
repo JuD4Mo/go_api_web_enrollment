@@ -3,14 +3,17 @@ package main
 import (
 	"context"
 	"fmt"
-	"go_api_web_enrollment/internal/enrollment"
-	"go_api_web_enrollment/pkg/bootstrap"
-	"go_api_web_enrollment/pkg/handler"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
+	"github.com/JuD4Mo/go_api_web_enrollment/internal/enrollment"
+	"github.com/JuD4Mo/go_api_web_enrollment/pkg/bootstrap"
+	"github.com/JuD4Mo/go_api_web_enrollment/pkg/handler"
+
+	courseSDK "github.com/JuD4Mo/go_api_web_sdk/course"
+	userSDK "github.com/JuD4Mo/go_api_web_sdk/user"
 	"github.com/joho/godotenv"
 )
 
@@ -31,11 +34,15 @@ func main() {
 	if pagLimDef == "" {
 		l.Fatal("paginator limit default is required")
 	}
+	token := os.Getenv("API_COURSE_TOKEN")
+
+	userTransport := userSDK.NewHttpClient(os.Getenv("API_USER_URL"), "")
+	courseTransport := courseSDK.NewHttpClient(os.Getenv("API_COURSE_URL"), token)
 
 	ctx := context.Background()
 
 	enrollRepo := enrollment.NewRepo(db, l)
-	enrollService := enrollment.NewService(l, enrollRepo)
+	enrollService := enrollment.NewService(l, enrollRepo, userTransport, courseTransport)
 	h := handler.NewEnrollmentHTTPServer(ctx, enrollment.MakeEndpoints(enrollService, enrollment.Config{LimitPage: pagLimDef}))
 
 	port := os.Getenv("PORT")

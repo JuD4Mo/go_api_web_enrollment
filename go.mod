@@ -1,14 +1,18 @@
-module go_api_web_enrollment
+module github.com/JuD4Mo/go_api_web_enrollment
 
 go 1.25.5
 
-require github.com/JuD4Mo/go_api_web_domain v0.0.2
+require (
+	github.com/JuD4Mo/go_api_web_domain v0.0.3
+	github.com/JuD4Mo/go_api_web_sdk v0.0.3
+)
 
 require (
 	filippo.io/edwards25519 v1.1.0 // indirect
 	github.com/go-kit/log v0.2.1 // indirect
 	github.com/go-logfmt/logfmt v0.6.1 // indirect
 	github.com/go-sql-driver/mysql v1.9.3 // indirect
+	github.com/ncostamagna/go_http_client v0.0.3 // indirect
 )
 
 require (
