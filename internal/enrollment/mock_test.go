@@ -29,3 +29,19 @@ func (mock *mockRepository) Update(ctx context.Context, id string, status *strin
 func (mock *mockRepository) Count(ctx context.Context, filter enrollment.Filters) (int, error) {
 	return mock.CountMock(ctx, filter)
 }
+
+type UserSdkMock struct {
+	GetMock func(id string) (*domain.User, error)
+}
+
+func (m *UserSdkMock) Get(id string) (*domain.User, error) {
+	return m.GetMock(id)
+}
+
+type CourseSdkMock struct {
+	GetMock func(id string) (*domain.Course, error)
+}
+
+func (m *CourseSdkMock) Get(id string) (*domain.Course, error) {
+	return m.GetMock(id)
+}

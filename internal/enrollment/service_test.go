@@ -159,3 +159,134 @@ func TestService_Count(t *testing.T) {
 		assert.Equal(t, expCounter, counter)
 	})
 }
+
+func TestService_Create(t *testing.T) {
+	l := log.New(io.Discard, "", 0)
+	t.Run("should return an error in user sdk", func(t *testing.T) {
+		expectedErr := errors.New("some error")
+		expectedCounter := 1
+		counter := 0
+		userSdk := &UserSdkMock{
+			GetMock: func(id string) (*domain.User, error) {
+				counter++
+				return nil, errors.New("some error")
+			},
+		}
+
+		service := enrollment.NewService(l, nil, userSdk, nil)
+
+		enrollment, err := service.Create(context.Background(), "11", "22")
+
+		assert.NotNil(t, err)
+		assert.Equal(t, expectedCounter, counter)
+		assert.Equal(t, expectedErr, err)
+		assert.Nil(t, enrollment)
+	})
+
+	t.Run("should return an error in course sdk", func(t *testing.T) {
+		expectedErr := errors.New("some error")
+		expectedCounter := 2
+		counter := 0
+		userSdk := &UserSdkMock{
+			GetMock: func(id string) (*domain.User, error) {
+				counter++
+				return nil, nil
+			},
+		}
+
+		courseSdk := &CourseSdkMock{
+			GetMock: func(id string) (*domain.Course, error) {
+				counter++
+				return nil, errors.New("some error")
+			},
+		}
+
+		service := enrollment.NewService(l, nil, userSdk, courseSdk)
+
+		enrollment, err := service.Create(context.Background(), "11", "22")
+
+		assert.NotNil(t, err)
+		assert.Equal(t, expectedCounter, counter)
+		assert.Equal(t, expectedErr, err)
+		assert.Nil(t, enrollment)
+	})
+
+	t.Run("should return an error in repository", func(t *testing.T) {
+		expectedErr := errors.New("some error")
+		expectedCounter := 3
+		counter := 0
+		userSdk := &UserSdkMock{
+			GetMock: func(id string) (*domain.User, error) {
+				counter++
+				return nil, nil
+			},
+		}
+
+		courseSdk := &CourseSdkMock{
+			GetMock: func(id string) (*domain.Course, error) {
+				counter++
+				return nil, nil
+			},
+		}
+
+		repo := &mockRepository{
+			CreateMock: func(ctx context.Context, enroll *domain.Enrollment) error {
+				counter++
+				return errors.New("some error")
+			},
+		}
+
+		service := enrollment.NewService(l, repo, userSdk, courseSdk)
+
+		enrollment, err := service.Create(context.Background(), "11", "22")
+
+		assert.NotNil(t, err)
+		assert.Equal(t, expectedCounter, counter)
+		assert.Equal(t, expectedErr, err)
+		assert.Nil(t, enrollment)
+	})
+
+	t.Run("should create enrollment", func(t *testing.T) {
+		expectedCounter := 3
+		counter := 0
+		expectedUserId := "11"
+		expectedCourseId := "22"
+		expectedStatus := domain.Pending
+		expectedId := "123"
+		userSdk := &UserSdkMock{
+			GetMock: func(id string) (*domain.User, error) {
+				counter++
+				assert.Equal(t, expectedUserId, id)
+				return nil, nil
+			},
+		}
+
+		courseSdk := &CourseSdkMock{
+			GetMock: func(id string) (*domain.Course, error) {
+				counter++
+				assert.Equal(t, expectedCourseId, id)
+				return nil, nil
+			},
+		}
+
+		repo := &mockRepository{
+			CreateMock: func(ctx context.Context, enroll *domain.Enrollment) error {
+				counter++
+				enroll.ID = "123"
+				return nil
+			},
+		}
+
+		service := enrollment.NewService(l, repo, userSdk, courseSdk)
+
+		enrollment, err := service.Create(context.Background(), "11", "22")
+
+		assert.Nil(t, err)
+		assert.Equal(t, expectedCounter, counter)
+		assert.NotNil(t, enrollment)
+		assert.Equal(t, expectedUserId, enrollment.UserID)
+		assert.Equal(t, expectedCourseId, enrollment.CourseID)
+		assert.Equal(t, expectedStatus, enrollment.Status)
+		assert.Equal(t, expectedId, enrollment.ID)
+	})
+}
