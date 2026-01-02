@@ -4,8 +4,8 @@ github.com/JuD4Mo/go_api_web_domain v0.0.3 h1:x+tlIUbhO0g8I8TooF2rqVhI0bT0p8h7yx
 github.com/JuD4Mo/go_api_web_domain v0.0.3/go.mod h1:w5vWqAHmQuQU+Hlj/TrdueB7v37GxqHi7Lvju6tIMoM=
 github.com/JuD4Mo/go_api_web_meta v0.0.1 h1:OkTtXDX8+F4zG5ZjEWOgMKmxhp8C/2u4D/wWQHP7XRU=
 github.com/JuD4Mo/go_api_web_meta v0.0.1/go.mod h1:3vjB00EaxcDEJuNkHthNx/5gZGdkZ/N5bb9AFhj+zC4=
-github.com/JuD4Mo/go_api_web_sdk v0.0.3 h1:sJPhwp615TefFT9cRHmXVdaamrTRCkDxVY6MKyr3hBk=
-github.com/JuD4Mo/go_api_web_sdk v0.0.3/go.mod h1:oOAdG2xPWdheucaAB8af7mO8mzDweaA2TquW4cMqEOE=
+github.com/JuD4Mo/go_api_web_sdk v0.0.4 h1:GKPL7JrQmVifqvOjWKUlXItYeq8CGOIghBgOIS+Sv9M=
+github.com/JuD4Mo/go_api_web_sdk v0.0.4/go.mod h1:oOAdG2xPWdheucaAB8af7mO8mzDweaA2TquW4cMqEOE=
 github.com/JuD4Mo/go_lib_response v0.0.1 h1:VYKRJbaa7XJ0+JsuCsBFWy3h2wuRKPZ7PGv0HsGD9wo=
 github.com/JuD4Mo/go_lib_response v0.0.1/go.mod h1:8YOXLUuDnX+FFC7VAdYX8ACPYPFiHcFOe2JTEDJ4jug=
 github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c=

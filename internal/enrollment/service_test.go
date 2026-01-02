@@ -9,6 +9,8 @@ import (
 
 	"github.com/JuD4Mo/go_api_web_domain/domain"
 	"github.com/JuD4Mo/go_api_web_enrollment/internal/enrollment"
+	courseSdk "github.com/JuD4Mo/go_api_web_sdk/course/mock"
+	userSdk "github.com/JuD4Mo/go_api_web_sdk/user/mock"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -166,7 +168,8 @@ func TestService_Create(t *testing.T) {
 		expectedErr := errors.New("some error")
 		expectedCounter := 1
 		counter := 0
-		userSdk := &UserSdkMock{
+
+		userSdk := &userSdk.UserSdkMock{
 			GetMock: func(id string) (*domain.User, error) {
 				counter++
 				return nil, errors.New("some error")
@@ -187,14 +190,14 @@ func TestService_Create(t *testing.T) {
 		expectedErr := errors.New("some error")
 		expectedCounter := 2
 		counter := 0
-		userSdk := &UserSdkMock{
+		userSdk := &userSdk.UserSdkMock{
 			GetMock: func(id string) (*domain.User, error) {
 				counter++
 				return nil, nil
 			},
 		}
 
-		courseSdk := &CourseSdkMock{
+		courseSdk := &courseSdk.CourseSdkMock{
 			GetMock: func(id string) (*domain.Course, error) {
 				counter++
 				return nil, errors.New("some error")
@@ -215,14 +218,14 @@ func TestService_Create(t *testing.T) {
 		expectedErr := errors.New("some error")
 		expectedCounter := 3
 		counter := 0
-		userSdk := &UserSdkMock{
+		userSdk := &userSdk.UserSdkMock{
 			GetMock: func(id string) (*domain.User, error) {
 				counter++
 				return nil, nil
 			},
 		}
 
-		courseSdk := &CourseSdkMock{
+		courseSdk := &courseSdk.CourseSdkMock{
 			GetMock: func(id string) (*domain.Course, error) {
 				counter++
 				return nil, nil
@@ -253,7 +256,7 @@ func TestService_Create(t *testing.T) {
 		expectedCourseId := "22"
 		expectedStatus := domain.Pending
 		expectedId := "123"
-		userSdk := &UserSdkMock{
+		userSdk := &userSdk.UserSdkMock{
 			GetMock: func(id string) (*domain.User, error) {
 				counter++
 				assert.Equal(t, expectedUserId, id)
@@ -261,7 +264,7 @@ func TestService_Create(t *testing.T) {
 			},
 		}
 
-		courseSdk := &CourseSdkMock{
+		courseSdk := &courseSdk.CourseSdkMock{
 			GetMock: func(id string) (*domain.Course, error) {
 				counter++
 				assert.Equal(t, expectedCourseId, id)

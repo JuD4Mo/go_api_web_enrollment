@@ -4,7 +4,7 @@ go 1.25.5
 
 require (
 	github.com/JuD4Mo/go_api_web_domain v0.0.3
-	github.com/JuD4Mo/go_api_web_sdk v0.0.3
+	github.com/JuD4Mo/go_api_web_sdk v0.0.4
 	github.com/stretchr/testify v1.11.1
 )
 
