@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"os"
 	"testing"
@@ -66,15 +67,29 @@ func TestMain(m *testing.M) {
 	srv := &http.Server{
 		Handler:      accessControl(h),
 		Addr:         address,
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 5 * time.Second,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 4 * time.Second,
 	}
 
-	errCh := make(chan error)
+	errCh := make(chan error, 1)
 	go func() {
 		l.Println("listen in", address)
 		errCh <- srv.ListenAndServe()
 	}()
+
+	// wait until server is accepting connections (timeout 5s)
+	deadline := time.Now().Add(5 * time.Second)
+	for {
+		conn, err := net.DialTimeout("tcp", address, 200*time.Millisecond)
+		if err == nil {
+			_ = conn.Close()
+			break
+		}
+		if time.Now().After(deadline) {
+			l.Fatal("server did not start in time: ", err)
+		}
+		time.Sleep(100 * time.Millisecond)
+	}
 
 	r := m.Run()
 
